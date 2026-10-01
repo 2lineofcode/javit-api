@@ -1,38 +1,13 @@
-import { NextApiRequest, NextApiResponse } from "next";
+import type { NextApiRequest, NextApiResponse } from 'next'
+import { fetchText, readQuery, sendError } from '../../../src/api'
+import { parseRanking } from '../../../src/provider-parser'
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-
+  if (!readQuery(req, res)) return
   try {
-    const response = await fetch(`https://missav.live/en/actresses/ranking`);
-    const ranks = [];
-    const __sc = await response.text();
-    console.log('🟡 __sc', __sc)
-
-    // ! case: found
-    const nameList = Array.from(__sc.matchAll(/<img\s+src="https:\/\/fourhoi.com\/actress\/.*?\.jpg"\s+alt="(.*?)"/gs)).map((match) => match[1]);
-    const rankList = Array.from(__sc.matchAll(/<span\s+class="(?:\s|[^>"])*?inline-flex\s+items-center\s+px-2.5\s+py-0.5\s+rounded-md\s+text-sm\s+font-medium(?:\s|[^>"])*?"\s*>\s*(Rank\s*#\d+)\s*<\/span>/gs)).map((match) => match[1].trim());
-    const avatarList = Array.from(__sc.matchAll(/<img\s+src="(https:\/\/fourhoi.com\/actress\/.*?\.jpg)"\s+alt=".*?"/gs)).map((match) => match[1]);
-
-
-    // loop codelist
-    for (let i = 0; i < nameList.length; i++) {
-      const name = nameList[i];
-      const rank = rankList[i];
-      const avatar = avatarList[i];
-
-      ranks.push({
-        name: name,
-        rank: rank,
-        avatar: avatar,
-      });
-    }
-
-    res.status(200).json({
-      code: 200,
-      server_time: Date.now(),
-      result: ranks,
-    });
+    const html = await fetchText('https://missav.ws/en/actresses/ranking')
+    res.status(200).json({ code: 200, server_time: Date.now(), result: parseRanking(html) })
   } catch (error) {
-    res.status(500).json(error);
+    sendError(res, error)
   }
 }

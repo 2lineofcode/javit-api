@@ -1,130 +1,89 @@
-# Javit API
+# JavIt API
 
-A modern API for fetching data from various JAV sites. Built with Next.js 15, React 19, and TypeScript.
+Next.js Pages Router API for metadata from R18, MissAV, NJav, and DMM.
+Requires Node.js 24 or newer. The project uses Yarn 4.18.1 and `yarn.lock`;
+do not generate a second dependency lockfile with npm install.
 
-## 🚀 Tech Stack
+## Development
 
-- **Next.js 15** - The React Framework for Production
-- **React 19** - Latest React with improved performance
-- **TypeScript 5.7** - Type-safe JavaScript
-- **Yarn 4** - Fast, reliable package manager
-- **ESLint & Prettier** - Code quality and formatting
-
-## ✨ Features
-
-- Fetch data from MissAV, NJav, and R18
-- Search for videos by code
-- Search for actresses
-- Get star rankings
-- Modern security headers
-- Type-safe API routes
-
-## API Endpoints
-
-### MissAV
-
-- `GET /api/missav`: Fetches a list of videos from MissAV.
-- `GET /api/missav/bycode?code={code}`: Fetches video details from MissAV by code.
-- `GET /api/missav/search?q={query}`: Searches for videos on MissAV.
-- `GET /api/missav/star_rank`: Fetches star rankings from MissAV.
-
-### NJav
-
-- `GET /api/njav`: Fetches a list of videos from NJav.
-- `GET /api/njav/bycode?code={code}`: Fetches video details from NJav by code.
-- `GET /api/njav/search?q={query}`: Searches for videos on NJav.
-- `GET /api/njav/star_rank`: Fetches star rankings from NJav.
-
-### R18
-
-- `GET /api/r18`: Fetches a list of videos from R18.
-- `GET /api/r18/bycode?code={code}`: Fetches video details from R18 by code.
-
-### Actress
-
-- `GET /api/actress?q={query}`: Searches for an actress.
-
-## 🛠️ Getting Started
-
-### Prerequisites
-
-- Node.js >= 18.18.0
-- Yarn >= 1.22.0
-
-### Installation
-
-1. **Clone the repository:**
-
-   ```bash
-   git clone <repository-url>
-   cd javit-api
-   ```
-
-2. **Install dependencies:**
-
-   ```bash
-   yarn install
-   ```
-
-3. **Run the development server:**
-
-   ```bash
-   yarn dev
-   ```
-
-4. **Open your browser:**
-
-   Navigate to [http://localhost:3000](http://localhost:3000)
-
-## Dependencies
-
-- [next](https://nextjs.org/): The React framework for production.
-- [react](https://reactjs.org/): A JavaScript library for building user interfaces.
-- [react-dom](https://reactjs.org/docs/react-dom.html): The entry point to the DOM and server renderers for React.
-- [axios](https://axios-http.com/): Promise based HTTP client for the browser and node.js.
-- [cheerio](https://cheerio.js.org/): Fast, flexible, and lean implementation of core jQuery designed specifically for the server.
-- [wanakana](https://wanakana.com/): A JavaScript library for detecting and transliterating between Hiragana, Katakana, and Romaji.
-
-## 📜 Available Scripts
-
-```
-- `yarn dev`            # Development server
-- `yarn build`          # Production build
-- `yarn lint`           # Run ESLint
-- `yarn lint:fix`       # Auto-fix ESLint errors
-- `yarn type-check`     # TypeScript validation
-- `yarn format`         # Format code dengan Prettier
-- `yarn format:check`   # Check formatting
+```sh
+npx --yes @yarnpkg/cli-dist@4.18.1 install --immutable
+cp .env.example .env.local
+npm run dev
 ```
 
-## 🏗️ Project Structure
+Open [localhost:3000/api](http://localhost:3000/api) for endpoint examples.
+Fill `DMM_API_ID` and `DMM_AFFILIATE_ID` in `.env.local` to enable actress
+search. Configure these same variables in Vercel for production. Credentials
+previously embedded in source should be rotated with the provider.
 
+## Endpoints
+
+All endpoints accept GET. Repeated, empty, and invalid query values return 400;
+other HTTP methods return 405. Search query text is URL-encoded before forwarding.
+
+| Endpoint                                       | Parameters                                                                 |
+| ---------------------------------------------- | -------------------------------------------------------------------------- |
+| `/api`                                         | Provider examples, or exactly one of `site`, `image`, `video`              |
+| `/api/r18`, `/api/missav`, `/api/njav`         | Endpoint examples                                                          |
+| `/api/r18/bycode`                              | Required `code`                                                            |
+| `/api/missav/bycode`, `/api/njav/bycode`       | Required `code`; `lang` defaults to `id`                                   |
+| `/api/missav/search`                           | Required `q`; `page` defaults to 1; language is English                    |
+| `/api/njav/search`                             | Required `q`; `page` defaults to 1; `lang` defaults to `id`                |
+| `/api/missav/star_rank`, `/api/njav/star_rank` | No parameters                                                              |
+| `/api/actress`                                 | Required `q`; `page` defaults to 1; `perPage` defaults to 100, maximum 100 |
+
+Supported languages: `en`, `id`, `cn`, `ja`, `ko`, `ms`, `th`, `de`, `fr`, `vi`,
+`fil`, `pt`. Pages must be positive integers.
+
+Missing resources return 404, upstream failures return 502, upstream timeouts
+return 504, and unconfigured actress search returns 503. Provider blocks such as
+HTTP 403 remain provider errors. MissAV uses a normal Google Chrome browser
+when Cloudflare rejects the HTTP request. Install Chrome locally; a temporary
+window may open during a request. The browser uses a fresh profile and closes
+afterward. Challenges that still require human verification return 503.
+For Vercel/Linux, configure `SCRAPER_BROWSER_URL` with a trusted Chrome DevTools
+endpoint; Chrome is not bundled with the deployment. Protect this endpoint and
+keep its URL private. NJav browser verification is not enabled or verified.
+A successful build does not guarantee upstream availability.
+
+## Proxy restrictions
+
+Proxy URLs must use HTTPS on the default port, without embedded credentials.
+The default allowed hosts are `r18.dev`, `njavtv.com`, `missav.live`, `missav.ws`,
+`fourhoi.com`, `javtrailers.com`, `pics.dmm.co.jp`, and subdomains of `dmm.co.jp`.
+Administrators can add exact, trusted CDN hostnames using the comma-separated
+`PROXY_ALLOWED_HOSTS` environment variable. Private/reserved IP addresses are
+blocked after DNS resolution, and redirects are validated again.
+
+`site` returns plain text, including HTML source, so upstream scripts cannot run
+on the API origin. `image` accepts raster image formats and buffers up to 10 MiB.
+Site responses and HLS playlists are limited to 2 MiB. Video responses stream
+with backpressure and preserve range headers. HLS master/media playlists, keys,
+and initialization segments are rewritten through the proxy, preserving query
+strings. All referenced CDN hosts must be allowed.
+
+## Checks
+
+```sh
+npm run lint
+npm run type-check
+npm test
+npm run format:check
+npm run build
+npx --yes @yarnpkg/cli-dist@4.18.1 npm audit --recursive
 ```
-javit-api/
-├── pages/           # Next.js pages and API routes
-│   ├── api/        # API endpoints
-│   │   ├── actress.ts
-│   │   ├── missav/
-│   │   ├── njav/
-│   │   └── r18/
-│   └── index.tsx   # Home page
-├── src/            # Source files
-├── styles/         # Global styles
-├── models/         # Data models
-└── public/         # Static assets
-```
 
-## 🔒 Security
+Type-checking uses TypeScript 7.0.2. The official TypeScript 6 compatibility
+package supplies the compiler API required by ESLint and Next.js build tooling.
+ESLint 10 uses `@eslint/compat` for Next.js plugins that still use older APIs.
+These packages can be removed when the upstream plugins support the new APIs.
+The `@humanfs/node` resolution applies its security patch until ESLint updates
+its pinned dependency. Yarn still reports the older ESLint peer range declared
+by `eslint-plugin-import`; the compatibility adapter keeps those rules enabled.
+Regression checks run locally without contacting providers.
 
-This project includes modern security headers:
-- X-Frame-Options
-- X-Content-Type-Options
-- X-DNS-Prefetch-Control
-- Referrer-Policy
-
-## 📝 Code Quality
-
-- **TypeScript** with strict mode enabled
-- **ESLint** for code linting
-- **Prettier** for consistent formatting
-- **Type checking** before commits recommended
+CI checks `master`, `main`, and `develop`, including pull requests. Production
+deployment runs only after all CI checks and the build pass for a push to
+`master`. Set `VERCEL_TOKEN`, `VERCEL_ORG_ID`, and `VERCEL_PROJECT_ID` as repository
+secrets. The workflow uses Vercel CLI to build and deploy the checked revision.

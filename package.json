@@ -6,36 +6,41 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "lint:fix": "next lint --fix",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "type-check": "tsc --noEmit",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "test": "node --test tests/api.test.mjs"
   },
   "dependencies": {
-    "@vercel/speed-insights": "^1.1.0",
-    "axios": "^1.7.9",
-    "cheerio": "^1.0.0",
-    "next": "^15.0.3",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
+    "@vercel/speed-insights": "^2.0.0",
+    "axios": "^1.20.0",
+    "cheerio": "^1.2.0",
+    "next": "^16.3.8",
+    "playwright-core": "^1.63.0",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
     "wanakana": "^5.3.1"
   },
   "devDependencies": {
-    "@types/node": "^22.10.2",
-    "@types/react": "^19.0.1",
-    "@types/react-dom": "^19.0.2",
-    "@typescript-eslint/eslint-plugin": "^8.18.1",
-    "@typescript-eslint/parser": "^8.18.1",
-    "eslint": "^9.17.0",
-    "eslint-config-next": "^15.0.3",
-    "eslint-config-prettier": "^9.1.0",
-    "prettier": "^3.4.2",
-    "typescript": "^5.7.2"
+    "@eslint/compat": "^2.1.1",
+    "@types/node": "^26.6.3",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@typescript/native": "npm:typescript@^7.0.2",
+    "eslint": "^10.11.0",
+    "eslint-config-next": "^16.3.8",
+    "eslint-config-prettier": "^10.1.8",
+    "prettier": "^3.9.9",
+    "typescript": "npm:@typescript/typescript6@^6.0.2"
   },
   "engines": {
-    "node": ">=18.18.0",
-    "yarn": ">=1.22.0"
+    "node": ">=24.0.0",
+    "yarn": ">=4.0.0"
   },
-  "packageManager": "yarn@4.5.3"
+  "packageManager": "yarn@4.18.1",
+  "resolutions": {
+    "@humanfs/node": "^0.16.8"
+  }
 }
