@@ -3,6 +3,7 @@ const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   serverExternalPackages: ['playwright-core'],
+  outputFileTracingIncludes: { '/api/**': ['./node_modules/playwright-core/browsers.json'] },
 
   // Security headers
   async headers() {
