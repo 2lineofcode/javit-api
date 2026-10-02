@@ -5,7 +5,6 @@ const providers = [
     color: 'green',
     description: 'Detailed movie metadata, cast, artwork, and release information.',
     category: 'Movie metadata',
-    action: '/api/r18/bycode',
     parameter: 'code',
     example: 'EYAN-181',
     endpoints: [{ path: '/api/r18/bycode', query: 'code=EYAN-181', label: 'Find a movie' }],
@@ -16,7 +15,6 @@ const providers = [
     color: 'purple',
     description: 'Discover movies, explore search results, and browse actress rankings.',
     category: 'Search & discovery',
-    action: '/api/missav/bycode',
     parameter: 'code',
     example: 'EYAN-181',
     endpoints: [
@@ -31,7 +29,6 @@ const providers = [
     color: 'blue',
     description: 'Movie details and discovery with support for multiple languages.',
     category: 'Multilingual catalog',
-    action: '/api/njav/bycode',
     parameter: 'code',
     example: 'EYAN-181',
     endpoints: [
@@ -46,7 +43,6 @@ const providers = [
     color: 'rose',
     description: 'Japanese movie metadata, cast, artwork, and search powered by LibreDMM.',
     category: 'LibreDMM catalog',
-    action: '/api/fanza/bycode',
     parameter: 'code',
     example: 'EYAN-181',
     endpoints: [
@@ -60,7 +56,6 @@ const providers = [
     color: 'orange',
     description: 'Find actresses by name and explore their profile information.',
     category: 'Actress directory',
-    action: '/api/actress',
     parameter: 'q',
     example: 'Name',
     endpoints: [{ path: '/api/actress', query: 'q=Name&page=1', label: 'Search actresses' }],
@@ -182,7 +177,7 @@ export default function Home() {
                 </div>
                 <p className="provider-description">{provider.description}</p>
                 <form
-                  action={provider.action}
+                  action={provider.endpoints[0].path}
                   method="get"
                   target="_blank"
                   className="request-form"

@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { ApiError } from '../lib/api.ts'
-import utils from '../lib/utils.ts'
+import * as utils from '../lib/utils.ts'
 import type { MovieModel } from './movie.ts'
 import { upstreamOptions } from './http.ts'
 

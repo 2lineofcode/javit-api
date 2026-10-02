@@ -2,7 +2,7 @@ import { load } from 'cheerio'
 import * as wanakana from 'wanakana'
 import type { MovieModel } from './movie.ts'
 import { ApiError } from '../lib/api.ts'
-import utils from '../lib/utils.ts'
+import * as utils from '../lib/utils.ts'
 
 export function parseMovie(html: string, code: string): MovieModel {
   if (html.includes('>404<')) throw new ApiError(404, 'Video not found')

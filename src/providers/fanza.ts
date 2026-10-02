@@ -1,6 +1,6 @@
 import { load, type CheerioAPI } from 'cheerio'
 import { ApiError } from '../lib/api.ts'
-import utils from '../lib/utils.ts'
+import * as utils from '../lib/utils.ts'
 import type { MovieModel } from './movie.ts'
 import { fetchText } from './http.ts'
 import { origins } from './catalog.ts'
