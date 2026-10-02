@@ -539,6 +539,36 @@ test('image and playlist responses preserve bytes, MIME type, redirect base and 
   )
 })
 
+test('JavMost catalog commands pass through the site proxy', async () => {
+  const payload = JSON.stringify({ success: true, total: 1, result: [{ name: 'TEST-001' }] })
+  await withAxios(
+    async (url, options) => {
+      assert.equal(new URL(url).hostname, 'www.javmost.ws')
+      assert.equal(options.responseType, 'text')
+      return { status: 200, headers: {}, data: payload }
+    },
+    async () => {
+      for (const path of [
+        'new/1/release',
+        'none/1/topmonth',
+        'none/1/topweek',
+        'none/1/topdaily',
+        'none/1/rating',
+        'TEST-001/1/search',
+      ]) {
+        const response = await proxyHandler(
+          request({ site: `https://www.javmost.ws/showlist2/${path}/` })
+        )
+        assert.equal(response.status, 200)
+        assert.equal(await response.text(), payload)
+      }
+    }
+  )
+  assert.throws(() => proxy.proxyUrl('https://www.javmost.ws.evil.example/showlist2/'), {
+    status: 400,
+  })
+})
+
 test('redirect loops terminate and administrator allowlists match exact hostnames', async () => {
   let calls = 0
   await withAxios(

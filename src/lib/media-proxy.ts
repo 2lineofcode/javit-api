@@ -47,6 +47,7 @@ export function proxyUrl(value: string): URL {
     'missav.live',
     'missav.ws',
     'fourhoi.com',
+    'www.javmost.ws',
     'javtrailers.com',
     'pics.dmm.co.jp',
     ...(process.env.PROXY_ALLOWED_HOSTS ?? '')
