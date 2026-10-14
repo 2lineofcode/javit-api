@@ -138,6 +138,14 @@ deployment runs only after all CI checks and the build pass for a push to
 `master`. Set `VERCEL_TOKEN`, `VERCEL_ORG_ID`, and `VERCEL_PROJECT_ID` as repository
 secrets. The workflow uses Vercel CLI to build and deploy the checked revision.
 
+For manual production deployment, log in with `vercel login`, then run:
+
+```sh
+./deploy.sh
+```
+
+The script deploys this directory using the `aditps-projects` team scope.
+
 ## Documentation cross-check
 
 Checked on October 1, 2026 with Context7 for Next.js Route Handlers, Node.js
