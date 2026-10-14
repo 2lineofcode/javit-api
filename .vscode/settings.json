@@ -37,7 +37,7 @@
   "prettier.requireConfig": true,
 
   // Spell checker
-  "cSpell.words": ["bikin", "clsx", "javit", "masalah", "missav", "nextjs", "njav", "wanakana"],
+  "cSpell.words": ["bikin", "clsx", "kuraku", "masalah", "missav", "nextjs", "njav", "wanakana"],
 
   // File explorer
   "files.exclude": {

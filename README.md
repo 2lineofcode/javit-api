@@ -1,8 +1,12 @@
-# JavIt API
+# kuraku-api
 
 Next.js 16 App Router API for metadata from R18, MissAV, NJav, Fanza (LibreDMM), and DMM.
 Requires Node.js 24.12 or newer (stable native TypeScript support). The project uses Yarn 4.18.1 and `yarn.lock`;
 do not generate a second dependency lockfile with npm install.
+
+Repository: [2lineofcode/kuraku-api](https://github.com/2lineofcode/kuraku-api).
+Production: [kuraku-api.vercel.app](https://kuraku-api.vercel.app).
+The previous production domain remains an API compatibility alias for existing clients.
 
 ## Development
 

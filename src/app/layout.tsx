@@ -4,8 +4,8 @@ import type { ReactNode } from 'react'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 
 export const metadata: Metadata = {
-  title: 'JavIt API',
-  description: 'Metadata API for JavIt.',
+  title: 'kuraku-api',
+  description: 'Metadata API for Kuraku.',
   icons: { icon: '/favicon.ico' },
 }
 

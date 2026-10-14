@@ -79,12 +79,12 @@ export default function Home() {
         Skip to content
       </a>
       <header className="topbar">
-        <a className="brand" href="#main" aria-label="JavIt API home">
+        <a className="brand" href="#main" aria-label="kuraku-api home">
           <span className="brand-mark" aria-hidden="true">
-            j.
+            k.
           </span>
           <span>
-            JavIt <span className="brand-suffix">API</span>
+            kuraku<span className="brand-suffix">-api</span>
           </span>
         </a>
         <nav aria-label="Main navigation">
@@ -104,7 +104,7 @@ export default function Home() {
         <section className="hero" aria-labelledby="hero-title">
           <div>
             <p className="eyebrow">
-              <span className="tiny-square" /> THE JAVIT TOOLKIT
+              <span className="tiny-square" /> THE KURAKU TOOLKIT
             </p>
             <h1 id="hero-title">
               One API.
@@ -121,7 +121,7 @@ export default function Home() {
           <div className="hero-aside">
             <span className="connection-line" aria-hidden="true" />
             <div className="hero-monogram" aria-hidden="true">
-              {'{ j }'}
+              {'{ k }'}
             </div>
             <p>
               Built for your library.
@@ -321,7 +321,7 @@ export default function Home() {
       </main>
       <footer className="footer">
         <span>
-          JavIt API <span className="footer-divider">/</span> Your library, connected.
+          kuraku-api <span className="footer-divider">/</span> Your library, connected.
         </span>
         <a href="#main">
           Back to top <span aria-hidden="true">↑</span>
